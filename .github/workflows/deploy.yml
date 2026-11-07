@@ -25,7 +25,8 @@ jobs:
         with:
           node-version: 22
         env:
-          BASE_PATH: /portfolio
+          SITE_URL: https://sadrulhossain.github.io
+          BASE_PATH: /gd-portfolio
 
   deploy:
     needs: build
