@@ -1,0 +1,36 @@
+---
+import SectionHeading from './SectionHeading.astro'
+import { work_experiences } from '../data/work-experience.js'
+---
+
+<section id="experience" class="border-b border-slate-200 dark:border-slate-800">
+    <div class="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-24">
+        <SectionHeading eyebrow="Career path" title="Work Experience" />
+
+        <ol class="space-y-8 border-l border-slate-200 pl-6 dark:border-slate-800">
+            {
+                work_experiences.map((item) => (
+                    <li class="relative">
+                        <span class="absolute -left-[29px] top-1.5 h-3 w-3 rounded-full border-2 border-teal-600 bg-white dark:border-teal-400 dark:bg-slate-950" />
+                        <p class="text-sm font-medium text-teal-700 dark:text-teal-400">
+                            {item.tenure.from} - {item.tenure.to}
+                        </p>
+                        <h3 class="mt-1 font-semibold text-slate-900 dark:text-white">
+                            {item.designation} <span class="font-normal text-slate-600 dark:text-slate-300">at {item.company}</span>
+                        </h3>
+                        {item.responsibilities.length > 0 && (
+                            <ul class="mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
+                                {item.responsibilities.map((r) => (
+                                    <li class="flex gap-2">
+                                        <span class="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-400 dark:bg-slate-500" />
+                                        <span>{r}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </li>
+                ))
+            }
+        </ol>
+    </div>
+</section>

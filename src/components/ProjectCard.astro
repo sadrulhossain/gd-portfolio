@@ -1,0 +1,69 @@
+---
+import { Image } from 'astro:assets'
+import type { ImageMetadata } from 'astro'
+import Icon from './Icon.astro'
+
+interface Props {
+    title: string
+    category: string
+    type: string
+    description: string
+    technologies: string[]
+    link?: string
+    image?: ImageMetadata
+}
+
+const { title, category, type, description, technologies, link, image } = Astro.props
+---
+
+<article class="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-teal-100 transition-shadow hover:shadow-lg dark:bg-slate-900 dark:ring-slate-800">
+    <div class="aspect-video w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+        {
+            image ? (
+                <Image
+                    src={image}
+                    alt={title}
+                    width={640}
+                    height={360}
+                    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+            ) : (
+                <div class="flex h-full w-full items-center justify-center text-slate-400 dark:text-slate-600">
+                    <Icon name="external-link" class="h-10 w-10" />
+                </div>
+            )
+        }
+    </div>
+    <div class="flex flex-1 flex-col p-5">
+        <p class="text-xs font-semibold uppercase tracking-wider text-teal-700 dark:text-teal-400">{category}</p>
+        <h3 class="mt-1 text-lg font-semibold text-slate-900 dark:text-white">{title}</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400">{type}</p>
+        <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{description}</p>
+
+        {
+            technologies.length > 0 && (
+                <ul class="mt-4 flex flex-wrap gap-1.5">
+                    {technologies.map((tech) => (
+                        <li class="rounded-full bg-slate-100 px-2.5 py-1 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                            {tech}
+                        </li>
+                    ))}
+                </ul>
+            )
+        }
+
+        {
+            link && (
+                <a
+                    href={link}
+                    target="_blank"
+                    rel="noopener"
+                    class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-teal-600 hover:text-teal-700 dark:text-teal-400"
+                >
+                    View project
+                    <Icon name="arrow-up-right" class="h-4 w-4" />
+                </a>
+            )
+        }
+    </div>
+</article>

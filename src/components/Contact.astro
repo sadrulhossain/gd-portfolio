@@ -1,0 +1,76 @@
+---
+import SectionHeading from './SectionHeading.astro'
+import Icon from './Icon.astro'
+import { profile } from '../data/profile.js'
+import { worldMapDots } from '../lib/assets/world-map-dots.js'
+
+const cards = [
+    { icon: 'map-pin' as const, label: 'Address', value: profile.location, href: undefined },
+    { icon: 'mail' as const, label: 'Email', value: profile.email, href: `mailto:${profile.email}` },
+    { icon: 'phone' as const, label: 'Phone', value: profile.phone, href: `tel:${profile.phoneHref}` },
+]
+
+// Same coordinate space as world-map-dots.js (derived from real coastline data).
+const WORLD_MAP_VIEWBOX = '30.767 241.591 784.077 458.627'
+
+// Illustrative "connected world" links - decorative only, not literal data.
+const BANGLADESH = { x: 616.3, y: 457.9 }
+const MYANMAR = { x: 645.5, y: 501.6 }
+const UK = { x: 400.6, y: 368.0 }
+const USA = { x: 143.6, y: 376.0 }
+const AUSTRALIA = { x: 673.0, y: 609.1 }
+
+const links = [MYANMAR, UK, USA, AUSTRALIA].map((p) => {
+    const mx = (BANGLADESH.x + p.x) / 2
+    const my = (BANGLADESH.y + p.y) / 2 - 40
+    return `M${BANGLADESH.x},${BANGLADESH.y} Q${mx},${my} ${p.x},${p.y}`
+})
+const nodes = [BANGLADESH, MYANMAR, UK, USA, AUSTRALIA]
+---
+
+<section id="contact" class="relative overflow-hidden border-b border-slate-200 dark:border-slate-800">
+    <svg
+        class="pointer-events-none absolute inset-0 h-full w-full opacity-[0.09] dark:opacity-[0.13]"
+        viewBox={WORLD_MAP_VIEWBOX}
+        preserveAspectRatio="xMidYMid meet"
+        aria-hidden="true"
+    >
+        <g class="text-teal-700 dark:text-teal-400" fill="currentColor">
+            {worldMapDots.map(([x, y]) => <circle cx={x} cy={y} r="1.8" />)}
+        </g>
+        <g class="text-teal-800 dark:text-teal-300" fill="none" stroke="currentColor">
+            {links.map((d) => <path d={d} stroke-width="1.5" stroke-dasharray="4 3" />)}
+            {nodes.map((n) => <circle cx={n.x} cy={n.y} r="4" fill="currentColor" stroke="none" />)}
+        </g>
+    </svg>
+
+    <div class="relative mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-24">
+        <SectionHeading eyebrow="Let's talk" title="Contact Me" center />
+        <p class="mx-auto max-w-2xl text-center text-slate-600 dark:text-slate-300">
+            If you are impressed with my skills and expertise and want to hire me or want to know more about me, please
+            feel free to contact me. My details are below.
+        </p>
+
+        <div class="mt-10 grid gap-6 sm:grid-cols-3">
+            {
+                cards.map((card) => (
+                    <div class="rounded-2xl border border-white/60 bg-white/50 p-6 text-center shadow-xl backdrop-blur-md dark:border-white/10 dark:bg-slate-900/40">
+                        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-teal-600/10 text-teal-700 dark:text-teal-400">
+                            <Icon name={card.icon} class="h-5 w-5" />
+                        </div>
+                        <h3 class="mt-4 text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                            {card.label}
+                        </h3>
+                        {card.href ? (
+                            <a href={card.href} class="mt-1 block text-slate-900 hover:text-teal-600 dark:text-white dark:hover:text-teal-400">
+                                {card.value}
+                            </a>
+                        ) : (
+                            <p class="mt-1 text-slate-900 dark:text-white">{card.value}</p>
+                        )}
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
